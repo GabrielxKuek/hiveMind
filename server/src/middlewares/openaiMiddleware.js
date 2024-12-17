@@ -20,7 +20,7 @@ module.exports.explainTrend = async (req, res, next) => {
             model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: "You are an assistant that helps content creators keep up with trends quickly and reliably, providing concise and accurate explanations of the latest trends." },
-                { role: "user", content: `Explain the following trend: ${context}` }
+                { role: "user", content: `Based on the following context, summarize the TikTok trend in a concise and engaging way. what it involves, why it resonates with users. Focus on key points and cultural relevance while avoiding unnecessary details or links. keep what you say short and to the point. base your information off of this data: ${context}` }
             ],
             stream: false,
         });

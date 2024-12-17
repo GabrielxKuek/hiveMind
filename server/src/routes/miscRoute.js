@@ -6,6 +6,6 @@ const tavilyMiddleware = require("../middlewares/tavilyMiddleware");
 const miscController = require("../controllers/miscController");
 
 // CONTROLLERS
-router.get("/", tavilyMiddleware.contextTrend, openaiMiddleware.explainTrend, miscController.explainTrend);
+router.get("/explain", tavilyMiddleware.contextTrend, openaiMiddleware.explainTrend, miscController.explainTrend);
 
 module.exports = router;
