@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="#" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Classification Output</title>
+    <style>
+        body {
+            background-color: #f0e7cc;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-bottom: 30px;
+        }
+        video {
+            display: block;
+            margin: 0 auto;
+        }
+        .progress-bar {
+            width: 20%;
+            height: 20px;
+            background-color: #f0f0f0;
+            margin-bottom: 10px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4caf50;
+        }
+        .score {
+            display: inline-block;
+            vertical-align: middle;
+            font-weight: bold;
+        }
+        .video-category {
+            padding-bottom: 30px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            transition: background-color 0.2s ease;
+        }
+        button:hover {
+            background-color: #006494;
+        }
+        h1 {
+            color: #070707;
+            text-align: center;
+            background-color: #cb6a16; /* Change the background color to your desired color */
+            padding: 10px;
+            margin-bottom: 20px;  
+        }
+        .clips-container {
+            text-align: center;
+        }
+
+    </style>
+    <script>
+        function playClip(videoPlayer, start, end) {
+            videoPlayer.currentTime = start;
+            videoPlayer.play();
+            videoPlayer.ontimeupdate = function () {
+                if (videoPlayer.currentTime >= end) {
+                    videoPlayer.pause();
+                }
+            };
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Classification</h1>
+        {% for video in duration_data.data %}
+            {% set video_id = video.video_id %}
+            {% set video_path = video_mapping[video_id] %}
+            <div class="video-category">
+                <h2>{{ video.classes[0].name }}</h2>
+                <p>Video file: {{video_path}}</p>
+                <div>
+                    <span class="score">Score: {{ '%.2f'|format(video.classes[0].score) }}</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ video.classes[0].score }}%;"></div>
+                    </div>
+                </div>
+                <div>
+                    <span class="score">Duration: {{ '%.2f%%'|format(video.classes[0].duration_ratio * 100) }}</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ video.classes[0].duration_ratio * 100 }}%;"></div>
+                    </div>
+                </div>
+                <video id="video-{{ video_id }}" width="480" height="320" controls>
+                    <source src="{{ url_for('serve_video', filename=video_path) }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="clips-container">
+                    <h3>Sample Clips</h3>
+                    {% for clip in top_clips[video_id] %}
+                    <button onclick="playClip(document.getElementById('video-{{ video_id }}'), {{ clip.start }}, {{ clip.end }})">Clip: {{ clip.prompt }} | Start {{ '%.2f'|format(clip.start) }}s - End {{ '%.2f'|format(clip.end) }}s - Score {{ '%.2f'|format(clip.score) }}</button>
+                    {% endfor %}
+            </div>
+            <br /><br />
+        {% endfor %}
+    </div>
+</body>
+</html>
