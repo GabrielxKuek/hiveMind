@@ -3,8 +3,6 @@ const { tavily } = require("@tavily/core");
 
 // config 
 const TAVILY_KEY = process.env.TAVILY_KEY;
-
-// logic
 const tvly = tavily({ apiKey: TAVILY_KEY });
 
 //////////////////////////////////////////////////////
