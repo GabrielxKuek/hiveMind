@@ -4,10 +4,10 @@
 // writing this it is set to one day)
 
 ////////////////////////////////////////////////////
-// MIDDLEWARE FUNCTION FOR FETCHING TRENDING VIDEOS
+// MIDDLEWARE FUNCTION FOR FETCHING TRENDING VIDEOS BY ALL
 ////////////////////////////////////////////////////
-module.exports.fetchTrendingVideos = async (req, res, next) => {
-    const { tag, day } = req.body;
+module.exports.fetchTrendingVideosByTag = async (req, res, next) => {
+    const { tagUrl } = req.body;
 
     const url = "https://example.org/products.json";
 
